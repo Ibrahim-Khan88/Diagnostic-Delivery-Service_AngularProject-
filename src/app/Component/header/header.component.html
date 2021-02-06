@@ -1,0 +1,48 @@
+
+
+<div  class="allContainer">
+
+    <div id="hospital-title">
+        Healthcare Diagnostics Center Ltd
+    </div>
+
+    <div class="logo">
+        <img (click)="home()" src="/../../assets/image/white.png" style="width: 130px; height: 30px;">
+    </div>
+    <i (click)="sendNavOpenFun()" class="fas fa-bars" id="menuIcon"></i>
+
+</div>
+
+
+
+
+<div id="sidebar-container">
+    <!-- <input type="checkbox" id="check"> <i class="fas fa-bars" id="btn"></i> -->
+
+    <label for="check">
+        <i (click)="sendNavCloseFun()" class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+        <header>
+            <!-- Top Choice -->
+            <img src="../assets/image/white.png" (click)="home()">
+        </header>
+        <ul>
+            <li (click)="home()"><a ><i class="fas fa-home"></i>Home</a></li> 
+            <li (click)="addInvestigationRequest()" ><a><i class="fas fa-arrow-right"></i>Bill</a></li>
+            <li (click)="setReport()" ><a ><i class="fas fa-arrow-right"></i>Report</a></li>
+            <li (click)="investigationList()" ><a ><i class="fas fa-arrow-right"></i>Investigation List</a></li>
+            <li (click)="addInvestigation()"><a><i class="fas fa-plus-circle"></i>Add Investigation</a></li>
+            <li><a><i class="far fa-question-circle"></i>About</a></li>
+            <li><a><i class="fas fa-sliders-h"></i>Services</a></li>
+            <li><a><i class="far fa-envelope"></i>Contact</a></li>
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+

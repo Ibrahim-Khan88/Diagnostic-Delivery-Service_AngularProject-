@@ -1,0 +1,866 @@
+<!-- <div onclick="myFunction(2,8)"> sdfghjkiuytr </div>
+
+
+		<table (keydown)="Up($event)" id="table" border="1">
+			<tr (click)="selectRow(0)" tabindex="0" >
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Age</th>
+			</tr>
+			<tr (click)="selectRow(1)" tabindex="0" >
+				<td>A1</td>
+				<td>B1</td>
+				<td>C1</td>
+			</tr>
+			<tr (click)="selectRow(2)" tabindex="0" >
+				<td>A2</td>
+				<td>B2</td>
+				<td>C2</td>
+			</tr>
+			<tr (click)="selectRow(3)" tabindex="0" >
+				<td>A3</td>
+				<td>B3</td>
+				<td>C3</td>
+			</tr>
+			<tr (click)="selectRow(4)" tabindex="0" >
+				<td>A5</td>
+				<td>B5</td>
+				<td>C5</td>
+			</tr>
+		</table>
+        <input type="text" (keydown)="move($event)">
+        <button  (keydown)="move($event)">move</button>
+		<button ng-keypress="Up()">ShortUpArrow;</button>
+		<button onclick="upNdown('down');">ShortDownArrow;</button> -->
+
+
+
+
+
+
+
+
+
+<div class="home">
+    <div id="home-title"> Home -> Report</div>
+</div>
+
+
+
+<div id="All-data-Container">
+
+    <!-- <div id="patient-text"> Patient Inforamtion </div> -->
+
+    <div style="width: 95%; margin: auto;">
+        <div class="section-title">
+            <h2 id="title-section">Patient Report</h2>
+        </div>
+    </div>
+
+
+
+    <div class="All-wrapper">
+
+
+        <div>
+            <div class="wrapper wrapper--w960">
+                <div class="card card-5">
+
+                    <div class="card-body">
+
+                        <form id="form" [formGroup]="billNumberForm"
+                            (ngSubmit)="billNumberSubmit(billNumberForm.value)">
+                            <div style="background-color: white;" class="form-row">
+
+                                <div class="name">Bill Number</div>
+                                <div style="width: 550px;" class="value">
+                                    <div class="input-group">
+                                        <input formControlName="billNumber" id="billNoinput" class="input--style-5"
+                                            type="text" name="billId">
+
+
+                                        <button class="btn-bill-submit btn--radius-2 btn--blue">Report</button>
+                                        <!-- btn   -->
+                                    </div>
+
+
+
+                                    <span
+                                        *ngIf="billNumberForm.get('billNumber').errors &&
+                                          (billNumberForm.get('billNumber').touched || billNumberForm.get('billNumber').dirty)">
+                                        <span *ngIf="billNumberForm.get('billNumber').errors.required">Bill
+                                            Number is
+                                            required</span>
+                                    </span>
+
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+
+                        <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0">
+
+
+                            <div style="margin-top: 100px;" class="form-row">
+
+                                <div class="name">Attached Investigation</div>
+                                <!-- <div class="value">
+                                        <div class="input-group ">
+                                            <input class="input--style-5" type="text" id="Amount" name="Amount">
+                                        </div>
+                                    </div> -->
+
+                            </div>
+
+
+
+
+                            <!-- Table -->
+                            <table  id="tablenm">
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Department</th>
+                                    <th>Number of Investigation</th>
+                                    <th>Update</th>
+                                    <th>Report Result</th>
+                                    <th>Print Result</th>
+                                </tr>
+
+                                <tr *ngFor="let select of investigationRequestList; index as i"
+                                >
+                                    <td>{{i+1}}</td>
+                                    <td>{{select.department}}</td>
+                                    <td>{{select.requestList.length}}</td>
+                                    <td><button (click)="showInvestigation(i)" class="Update-btn">Update</button>
+                                    </td>
+                                    <td><button *ngIf="reportResultButtonShow[i]" (click)="showInvestigationReport(i)"
+                                            class="Update-btn">Report</button>
+
+                                        <button *ngIf="!reportResultButtonShow[i]" [disabled]=true class="Update-btn"
+                                            style="pointer-events: none;">Not set</button>
+                                    </td>
+
+                                    <td><button *ngIf="reportResultButtonShow[i]"
+                                            (click)="printInvestigation(select.department, select.type, i)"
+                                            class="Update-btn">Print</button>
+
+                                        <button *ngIf="!reportResultButtonShow[i]" [disabled]=true class="Update-btn"
+                                            style="pointer-events: none;">Not set</button>
+                                    </td>
+                                </tr>
+
+                                <!-- reportResultButtonShow[i] -->
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+<!-- <button (click)="temp()"  class="Update-btn">cLick mee</button> -->
+
+
+<!-- <div *ngIf="testBooleanlast && investigationRequestList != null && investigationRequestList.length > 0">
+
+    <h1>Print avalue</h1>
+    <div *ngFor="let investigationRequest of investigationRequestList; index as i">
+        <div *ngFor="let requestList of investigationRequest.requestList; index as k">
+
+            <div *ngFor="let paramGroupList of requestList.paramGroupList; index as l">
+                <h1>{{paramGroupList.name}}</h1>
+            </div>
+
+            <h1>paramGroupList Name == {{requestList.paramGroupList}}</h1>
+
+        </div>
+    </div>
+
+</div> -->
+
+
+
+<div id="list-report-popup">
+    <a id="list-report-popup-close">&times;</a>
+
+    <!-- *ngIf="investigationRequestList != null" -->
+
+    <div style="padding: 0;" id="information-pop-up">
+
+        <div id="heading">
+            <div style="display: inline-block;  border-bottom: 3px solid Black; ">
+                <h2>Investigation Report List</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0"
+            style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 *ngIf="investigationRequestList != null" id="title-section">
+                    {{investigationRequestList[selectedIndex].department}} DEPARTMENT</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="list_report_show && investigationRequestList != null && investigationRequestList.length > 0"
+            id="list-investigation">
+            <!-- *ngIf="list_report_show && investigationRequestList != null && investigationRequestList.length > 0" -->
+
+            <table id="pop-up-report-table">
+                <tr>
+                    <th>Number</th>
+                    <th>Investigation Name</th>
+                    <th>Unit</th>
+                    <th>Reference Range</th>
+                    <th>Result</th>
+                </tr>
+
+
+                <tr *ngFor="let select of investigationRequestList[selectedIndex].requestList; index as i">
+
+                    <td>{{i+1}}</td>
+                    <td>{{select.investigationName}}</td>
+                    <td>{{select.unit}}</td>
+                    <td>{{select.refValue}}</td>
+
+                    <td><input class="list-investigation-input" id="list-input-{{i}}" [value]="select.reportResult"
+                            type="text" placeholder="Result">
+                    </td>
+                </tr>
+                <!-- select.reportResult  -->
+            </table>
+
+
+
+
+        </div>
+
+
+
+
+        <div *ngIf="!list_report_show && investigationRequestList != null && investigationRequestList.length > 0"
+            id="individual-investigation">
+
+
+            <table id="pop-up-report-table">
+                <tr>
+                    <th>Number</th>
+                    <th>Investigation Name</th>
+                    <th>Report Result</th>
+                </tr>
+                <tr *ngFor="let select of investigationRequestList[selectedIndex].requestList; index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{select.investigationName}}</td>
+                    <td><button (click)="individualInvestigationReportOpen(i)"
+                            class=" Update-btn btn--radius-2 btn--blue">Report</button></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+
+        <div style="position: absolute; left: 3%; bottom: 10px;" *ngIf="list_report_show">
+
+            <div style="margin-top: 10px;" class="form-row">
+
+                <div class="name">Lab Doctor</div>
+
+
+                <mat-form-field style="width: 400px;">
+                    <input placeholder="Select Lab Doctor" [formControl]="myControl" type="text" matInput
+                        [matAutocomplete]="auto" style="border: none; width: 200px;">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedLAbDoctor($event.option.value)">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+
+            </div>
+
+            <button style="margin-top: 0px;" (click)="saveReportResult()"
+                class="btn btn-popup-save btn--radius-2 btn--blue">Save</button>
+
+            <button style="margin-top: 0px; margin-left: 30px;" (click)="deleteReportResult()"
+                class="btn btn-popup-save btn--radius-2 btn--blue">Delete</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<div id="list-report-result-popup">
+    <a id="list-report-result-popup-close">&times;</a>
+
+    <!-- *ngIf="investigationRequestList != null" -->
+
+    <div style="padding: 0;" id="information-pop-up">
+
+        <div id="heading">
+            <div style="display: inline-block;  border-bottom: 3px solid Black; ">
+                <h2>Investigation Report List</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0"
+            style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 *ngIf="investigationRequestList != null" id="title-section">
+                    {{investigationRequestList[selectedResultIndex].department}} DEPARTMENT</h2>
+            </div>
+        </div>
+
+
+        <div style="height: 400px;"
+            *ngIf="list_reportResult_show && investigationRequestList != null && investigationRequestList.length > 0"
+            id="list-investigation">
+            <!-- *ngIf="list_report_show && investigationRequestList != null && investigationRequestList.length > 0" -->
+
+            <table id="pop-up-report-table">
+                <tr>
+                    <th>Number</th>
+                    <th>Investigation Name</th>
+                    <th>Unit</th>
+                    <th>Reference Range</th>
+                    <th>Result</th>
+                </tr>
+
+
+                <tr *ngFor="let select of investigationRequestList[selectedResultIndex].requestList; index as i">
+
+
+                    <td *ngIf="select.reportResult != null && select.reportResult != ' '">{{i+1}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult != ' '">
+                        {{select.investigationName}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult != ' '">{{select.unit}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult != ' '">{{select.refValue}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult != ' '">{{select.reportResult}}
+                    </td>
+
+
+
+                </tr>
+
+            </table>
+
+        </div>
+
+
+
+
+        <div *ngIf="!list_reportResult_show && investigationRequestList != null && investigationRequestList.length > 0"
+            id="individual-investigation">
+
+
+            <table id="pop-up-report-table">
+                <tr>
+                    <th style="text-align: left;">Investigation Name</th>
+                    <th>Report Result</th>
+                </tr>
+
+                <tr *ngFor="let select of investigationRequestList[selectedResultIndex].requestList; index as i">
+                    <!-- <td *ngIf="select.reportResult != null && select.reportResult.length > 0">{{i+1}}</td> -->
+                    <td style="text-align: left;" *ngIf="select.reportResult != null && select.reportResult.length > 0">
+                        {{select.investigationName}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult.length > 0"><button
+                            (click)="individualInvestigationReportResultOpen(i)"
+                            class=" Update-btn btn--radius-2 btn--blue">Report</button></td>
+                </tr>
+
+
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<div id="individual-report-print-popup">
+    <a id="individual-report-print-popup-close">&times;</a>
+
+    <!-- *ngIf="investigationRequestList != null" -->
+
+    <div style="padding: 0;" id="information-pop-up">
+
+        <div id="heading">
+            <div style="display: inline-block;  border-bottom: 3px solid Black; ">
+                <h2>Investigation Report List</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0"
+            style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 *ngIf="investigationRequestList != null" id="title-section">
+                    {{investigationRequestList[selectedPrintIndex].department}} DEPARTMENT</h2>
+            </div>
+        </div>
+
+
+        <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0"
+            id="individual-investigation">
+
+
+            <table id="pop-up-report-table">
+                <tr>
+                    <th style="text-align: left;">Investigation Name</th>
+                    <th>Report Print</th>
+                </tr>
+                <tr *ngFor="let select of investigationRequestList[selectedPrintIndex].requestList; index as i">
+
+                    <td style="text-align: left;" *ngIf="select.reportResult != null && select.reportResult.length > 0">
+                        {{select.investigationName}}</td>
+                    <td *ngIf="select.reportResult != null && select.reportResult.length > 0"><button
+                            (click)="printFunction(investigationRequestList[selectedPrintIndex].department, investigationRequestList[selectedPrintIndex].requestList[i].investigationRequestId)"
+                            class=" Update-btn btn--radius-2 btn--blue">Print</button></td>
+                </tr>
+
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div id="individualreport-popup">
+    <a id="individualreport-popup-close">&times;</a>
+
+    <div style="width: 95%; margin: auto;">
+        <div class="section-title">
+            <h2 id="title-section">Report</h2>
+        </div>
+    </div>
+
+
+    <div id="individual-report-result-input-contain">
+        <strong>FINDINGS :</strong> <br> <br>
+
+        No fracture and dislocation is noted <br> <br>
+        No bony lession is seen <br> <br>
+        Bone density is within limit <br> <br>
+
+
+        <strong>COMMENT :</strong> <br>
+        No significant abnormality is detected
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<div id="report-set-popup">
+    <a id="report-set-popup-close">&times;</a>
+
+    <div style="width: 95%; margin: auto;">
+        <div style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 id="title-section">Update Report</h2>
+            </div>
+        </div>
+
+
+
+
+        <form style="width: 100%; margin: auto; margin-top: 0px;" [formGroup]="individualReportSet"
+            (ngSubmit)="setIndividualReport()">
+            <div class="form-group">
+                <label for="editor">
+                </label>
+                <quill-editor formControlName="report" [styles]="editorStyle"></quill-editor>
+            </div>
+            <!-- <button class="btn btn--blue">Submit</button> -->
+        </form>
+
+        <div style="margin-top: 10px; margin-bottom: 10px;" class="form-row">
+
+            <div class="name">Lab Doctor</div>
+
+
+            <mat-form-field style="width: 400px;">
+                <input placeholder="Select Lab Doctor" [formControl]="myControl" type="text" matInput
+                    [matAutocomplete]="auto" style="border: none; width: 200px;">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+
+        </div>
+
+        <button (click)="setIndividualReport()" style="margin: 0px; margin-bottom: 15px"
+            class="btn btn-popup-save btn--radius-2 btn--blue">Save</button>
+
+        <button (click)="deleteReportResult()" style="margin: 0px; margin-bottom: 15px; margin-left: 30px;"
+            class="btn btn-popup-save btn--radius-2 btn--blue">Delete</button>
+    </div>
+
+</div>
+
+
+
+
+<div id="lodingDiv">
+    <i class="fas fa-circle-notch fa-spin"></i>
+    <div> {{loadingMessage}} </div>
+</div>
+
+
+<div id="backgroundloding">
+    <!-- <i style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+    font-size: 30px; color: white;" class="fas fa-circle-notch fa-spin"></i> -->
+</div>
+
+
+
+<!-- Popup message  -->
+<div class="popup center border-class">
+
+    <div *ngIf="successfullShow">
+        <div class="icon">
+            <i class="fa fa-check"></i>
+        </div>
+    </div>
+
+    <div *ngIf="!successfullShow">
+        <div class="icon">
+            <i class="fa fa-exclamation-triangle"></i>
+        </div>
+    </div>
+
+    <div class="title-pop-up">
+        {{popupMessage}}
+    </div>
+
+    <div class="description"></div>
+
+
+    <div class="dismiss-btn">
+        <button id="dismiss-popup-btn">
+            Dismiss
+        </button>
+    </div>
+</div>
+
+
+
+<div id="param-group-popup">
+    <a id="param-group-popup-close">&times;</a>
+
+    <div *ngIf="investigationRequestList != null && investigationRequestList.length > 0"
+        style="width: 90%; margin: auto; margin-top: 15px;">
+        <div style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 id="title-section">
+                    Param Group</h2>
+            </div>
+        </div>
+
+        <table style="margin-bottom: 10px; margin-top: 0;" id="param-group-table-heading">
+            <tr>
+                <th>ParamGroup</th>
+                <th style="text-align: center;">Reference</th>
+                <th style="text-align: center;">Unit</th>
+                <th>Report Result</th>
+            </tr>
+        </table>
+
+
+
+
+        <div style="height: 350px; width: 100%; overflow-y: scroll; margin-top: 10px;">
+
+
+            <div *ngFor="let paramGroup of investigationRequestList[selectedIndex].requestList[individualInvestigationRequestId]?.paramGroupList;
+            index as j">
+                <div style="font-size: 15px; font-weight: 600; margin: 0;">{{paramGroup.name}}</div>
+
+
+                <table style="margin-bottom: 10px; margin-top: 0; background-color: #f2f2f2;" id="param-group-table">
+                    <tr *ngFor="let parameters of paramGroup.parameters;
+                    index as i">
+                        <td>{{parameters.name}}</td>
+
+                        <td *ngIf="parameters.refValue != null" style="text-align: center;">{{parameters.refValue}}</td>
+                        <td *ngIf="parameters.refValue == null" style="text-align: center;"></td>
+
+                        <td *ngIf="parameters.unit != null" style="text-align: center;">{{parameters.unit}}</td>
+                        <td *ngIf="parameters.unit == null" style="text-align: center;"></td>
+
+
+
+                        <td *ngIf="parameters.resultType == 'text' " style="position: relative;"><input
+                                class="input-option" id="parameter-input-{{j}}-{{i}}" type="text"></td>
+                        <!-- //value="parameter-input-{{j}}-{{i}}" -->
+                        <td *ngIf="parameters.resultType == 'DropDown' " style="position: relative;">
+
+                            <select id="parameter-input-{{j}}-{{i}}" style="width: 120px; height: 20px;"
+                                class="input-option">
+
+                                <option value="Nill" >Nill</option>
+                                <option *ngFor="let data of parameters.dropDownInput" [value]='data.value'>
+                                    {{data.value}}
+                                </option>
+
+                            </select>
+                        </td>
+
+
+                    </tr>
+                </table>
+
+            </div>
+
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="form-row">
+
+            <div class="name">Lab Doctor</div>
+
+
+            <mat-form-field style="width: 400px;">
+                <input placeholder="Select Lab Doctor" [formControl]="myControl" type="text" matInput
+                    [matAutocomplete]="auto" style="border: none; width: 200px; ">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <!-- (optionSelected)="assignLabDoctor($event.option.value)" -->
+
+            <button style="margin-left: 30px;" (click)="saveParameterResult()"
+                class="btn  btn--radius-2 btn--blue">Save</button>
+
+            <button style="margin-left: 50px;" (click)="deleteReportResult()"
+                class="btn  btn--radius-2 btn--blue">Delete</button>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- <div *ngIf="!paramOrParameterShow && investigationRequestList != null && investigationRequestList.length > 0"
+        style="width: 90%; margin: auto; margin-top: 15px;">
+        <div style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 id="title-section">
+                    Parameters</h2>
+            </div>
+        </div>
+
+        <div style="height: 310px; width: 100%; overflow-y: scroll;">
+            <table id="param-group-table">
+                <tr>
+                    <th>Parameters</th>
+                    <th>Reference Vlaue</th>
+                    <th>Report Result</th>
+                </tr>
+
+                <tr *ngFor="let parameters of investigationRequestList[selectedIndex].requestList[individualInvestigationRequestId].paramGroupList[selectedParamGroupIndex].parameters;
+             index as i">
+                    <td>{{parameters.name}}</td>
+                    <td>{{parameters.refValue}}</td>
+                    <td *ngIf="parameters.resultType == 'text' " style="position: relative;"><input class="input-option"
+                            id="parameter-input-{{i}}" type="text"></td>
+
+                    <td *ngIf="parameters.resultType == 'DropDown' " style="position: relative;">
+                        <select id="parameter-input-{{i}}" style="width: 120px; height: 20px;" class="input-option">
+
+                            <option *ngFor="let data of dropDownArray" [value]='data'>{{data}}
+                            </option>
+
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+
+    </div> -->
+
+
+</div>
+
+
+
+<div id="param-group-report-popup">
+    <a *ngIf="paramOrParameterResultShow" id="param-group-report-popup-close">&times;</a>
+
+    <div *ngIf="paramOrParameterResultShow && investigationRequestList != null && investigationRequestList.length > 0"
+        style="width: 90%; margin: auto; margin-top: 15px;">
+        <div style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 id="title-section">
+                    Param Group</h2>
+            </div>
+        </div>
+
+
+
+
+        <table style="margin-bottom: 10px; margin-top: 0;" id="param-group-table-heading">
+            <tr>
+                <th>ParamGroup</th>
+                <th style="text-align: center;">Reference</th>
+                <th style="text-align: center;">Unit</th>
+                <th>Report Result</th>
+            </tr>
+        </table>
+
+
+        <div style="height: 400px;" id="list-investigation">
+
+            <div *ngFor="let paramGroup of investigationRequestList[selectedResultIndex].requestList[individualInvestigationRequestId]?.paramGroupList;
+        index as i">
+                <div  *ngIf="paramGroup.headingShow" style="font-size: 15px; font-weight: 600; margin: 0;">{{paramGroup.name}}</div>
+
+                <!-- <table style="margin-bottom: 10px; margin-top: 0; background-color: white;" id="param-group-table">
+               
+            </table> -->
+
+
+
+                <table style="margin-bottom: 10px; margin-top: 0; background-color: #f2f2f2;" id="param-group-table">
+
+                    <tr *ngFor="let parameters of paramGroup.parameters;
+                index as j">
+                        <td>{{parameters.name}}</td>
+
+                        <td *ngIf="parameters.refValue != null" style="text-align: center;">{{parameters.refValue}}</td>
+                        <td *ngIf="parameters.refValue == null" style="text-align: center;"></td>
+
+                        <td *ngIf="parameters.unit != null" style="text-align: center;">{{parameters.unit}}</td>
+                        <td *ngIf="parameters.unit == null" style="text-align: center;"></td>
+
+                        <td *ngIf="parameters.reportResult != null && parameters.reportResult != ''"
+                            style="position: relative;">
+                            {{parameters.reportResult}}</td>
+                        <td *ngIf="parameters.reportResult == null || parameters.reportResult == ''"
+                            style="position: relative;">
+                            Not set</td>
+
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <!-- <table id="param-group-table">
+            <tr>
+                <th>Param Group</th>
+                <th></th>
+            </tr>
+
+            <tr *ngFor="let paramGroup of investigationRequestList[selectedResultIndex].requestList[individualInvestigationRequestId].paramGroupList;
+             index as i" (click)="openParameterResult(i)">
+                <td>{{paramGroup.name}}</td>
+                <td><i style="margin-right: 10px; color: blue;" class="fas fa-arrow-right"></i></td>
+            </tr>
+
+        </table> -->
+
+
+    </div>
+
+
+    <!-- 
+    <div *ngIf="!paramOrParameterResultShow && investigationRequestList != null && investigationRequestList.length > 0"
+        style="width: 90%; margin: auto; margin-top: 15px;">
+        <div style="width: 100%; margin: auto;">
+            <div class="section-title">
+                <h2 id="title-section">
+                    Parameters</h2>
+            </div>
+        </div>
+
+        <div style="height: 310px; width: 100%; overflow-y: scroll;">
+            <table id="param-group-table">
+                <tr>
+                    <th>Parameters</th>
+                    <th>Reference Vlaue</th>
+                    <th>Report Result</th>
+                </tr>
+
+                <tr *ngFor="let parameters of investigationRequestList[selectedResultIndex].requestList[individualInvestigationRequestId].paramGroupList[selectedParamGroupIndex].parameters;
+             index as i">
+                    <td>{{parameters.name}}</td>
+                    <td>{{parameters.refValue}}</td>
+                    <td *ngIf="parameters.reportResult != null && parameters.reportResult != ''"
+                        style="position: relative;">
+                        {{parameters.reportResult}}</td>
+
+                    <td *ngIf="parameters.reportResult == null || parameters.reportResult == ''"
+                        style="position: relative;">
+                        Not set</td>
+                </tr>
+
+            </table>
+        </div>
+
+    </div>
+
+
+    <div *ngIf="!paramOrParameterResultShow" style="position: absolute; left: 30px; bottom: 20px;">
+        <button (click)="backParameter()" class="btn  btn--radius-2 btn--blue">Back</button>
+    </div> -->
+
+
+    <!-- *ngFor="let parameters of investigationRequestList[1].requestList[individualInvestigationRequestId].paramGroupList[selectedParamGroupIndex].parameters;
+    index as i" -->
+
+</div>
