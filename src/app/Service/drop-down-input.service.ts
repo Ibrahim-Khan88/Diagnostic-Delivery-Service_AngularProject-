@@ -9,8 +9,8 @@ import { DropDownInput } from '../Model/DropDownInput';
 })
 export class DropDownInputService {
 
- private fetchDropDownInputUrl: string = "http://localhost:8080/dropdowninput";
-  //private fetchDropDownInputUrl: string = "/assets/data/dropdown.json";
+ //private fetchDropDownInputUrl: string = "http://localhost:8080/dropdowninput";
+  private fetchDropDownInputUrl: string = "/assets/data/dropdown.json";
 
   constructor(private _http : HttpClient) { }
 

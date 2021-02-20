@@ -74,9 +74,18 @@
                                     <div class="name">Mobile</div>
                                     <div class="value">
                                         <div class="input-group ">
-                                            <input formControlName="mobile" class="input--style-5" type="text"
+                                            <input
+                                            [ngClass]="{'borderRed' : investigationPostForm.get('mobile').errors &&
+                                (investigationPostForm.get('mobile').touched || investigationPostForm.get('mobile').dirty)}"
+                                             formControlName="mobile" class="input--style-5" type="text"
                                                 name="Date">
                                         </div>
+
+                                        <span
+                                        *ngIf="investigationPostForm.get('mobile').errors && (investigationPostForm.get('mobile').touched || investigationPostForm.get('mobile').dirty)">
+                                        <span *ngIf="investigationPostForm.get('mobile').errors.required"> Mobile
+                                            number is required</span>
+                                    </span>
 
                                     </div>
 
@@ -138,7 +147,7 @@
 
 
                                     <mat-form-field  style="width:500px !important">
-                                        <input placeholder="Select Investigation" [formControl]="myControlRefDoctor" type="text"
+                                        <input placeholder="Select Reference Doctor" [formControl]="myControlRefDoctor" type="text"
                                             matInput [matAutocomplete]="auto" style="border: none; width: 400px;">
                                         <mat-autocomplete  #auto="matAutocomplete"
                                             (optionSelected)="selectedRefDoctor($event.option.value)">

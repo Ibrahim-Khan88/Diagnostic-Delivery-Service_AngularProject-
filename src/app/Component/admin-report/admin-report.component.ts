@@ -106,6 +106,8 @@ export class AdminReportComponent implements OnInit {
     this.dropDownArray = new Array<string>();
     this.labDoctorName = new Array<string>();
 
+    
+
     this.providerId = this.localStoregeService.retrieve("providerId");
     if (this.providerId == null) {
       this.router.navigate(['/']);
@@ -124,8 +126,8 @@ export class AdminReportComponent implements OnInit {
             startWith(''),
             map(value => this._filter(value))
           );
-      }, error => {
-      }
+
+      }, error => {}
     );
 
 
@@ -156,6 +158,7 @@ export class AdminReportComponent implements OnInit {
       $("#list-report-popup-close").click(function () {
         $("#list-report-popup").css({ 'height': 0 });
         $("#list-report-popup").toggleClass("border-class");
+        
       });
 
 
@@ -244,10 +247,6 @@ export class AdminReportComponent implements OnInit {
 
     });
 
-    function myFunction(a, b) {
-      alert(a * b);
-    }
-
 
     var index = 1;
     document.onkeydown = checkKey;
@@ -285,8 +284,6 @@ export class AdminReportComponent implements OnInit {
     }
 
 
-
-
     function getSelectedRow() {
       //  alert("javascript");
       // var table = document.getElementById("table") as HTMLTableElement;
@@ -309,9 +306,6 @@ export class AdminReportComponent implements OnInit {
       // }
 
     }
-
-
-    getSelectedRow();
 
 
     function upNdown(direction) {
@@ -347,11 +341,12 @@ export class AdminReportComponent implements OnInit {
     }
 
     table.rows[index].focus();
-    console.log("current index ==" + this.currentRowSelect);
 
   }
 
-  Up(event: any) {
+  UpAndDown(event: any) {
+
+
 
     if (event.keyCode == 38 && this.currentRowSelect > 1) {
       var table = document.getElementById("table") as HTMLTableElement;
@@ -361,15 +356,13 @@ export class AdminReportComponent implements OnInit {
 
       }
 
-      console.log("current index ==" + this.currentRowSelect);
       this.currentRowSelect--;
 
       var ii = this.currentRowSelect;
       table.rows[ii].focus();
-      console.log("current index ==" + this.currentRowSelect + " " + ii);
 
     }
-    else if (event.keyCode == 40 && this.currentRowSelect < 4) {
+    else if (event.keyCode == 40 && this.currentRowSelect < this.investigationRequestList.length) {
       var table = document.getElementById("table") as HTMLTableElement;
       for (var i = 1; i < table.rows.length; i++) {
 
@@ -377,18 +370,29 @@ export class AdminReportComponent implements OnInit {
 
       }
 
-      console.log("current index ==" + this.currentRowSelect);
       this.currentRowSelect++;
 
       var ii = this.currentRowSelect;
       table.rows[ii].focus();
-      console.log("current index ==" + this.currentRowSelect + " " + ii);
     }
     else if (event.keyCode == 13) {
-      console.log("Enter is pressed==" + this.currentRowSelect);
+      this.showInvestigation(this.currentRowSelect-1);
     }
 
 
+  }
+
+
+  returnFocusToCurrentRow(){
+    var table = document.getElementById("table") as HTMLTableElement;
+    for (var i = 1; i < table.rows.length; i++) {
+
+      table.rows[i].blur();
+
+    }
+
+    var ii = this.currentRowSelect;
+    table.rows[ii].focus();
   }
 
   move(event: any) {
@@ -700,7 +704,7 @@ export class AdminReportComponent implements OnInit {
 
     this.selectedIndex = 0;
 
-    if (this.billNumberForm.valid || this.billNumberForm.valid) {
+    if (!this.billNumberForm.valid || this.billNumberForm.valid) {
 
       this.loadingOpen("loading");
       this.reportResultButtonShow = [];
@@ -739,18 +743,22 @@ export class AdminReportComponent implements OnInit {
 
             this.updateValue();
 
-            // var table = document.getElementById("table") as HTMLTableElement;
-            // console.log("row==" + table);
-            // for (var i = 1; i < table.rows.length; i++) {
+            setTimeout(() => { 
+
+              var table = document.getElementById("table") as HTMLTableElement;
+            console.log("row==" + table);
+            for (var i = 1; i < table.rows.length; i++) {
       
-            //   table.rows[i].blur();
+              table.rows[i].blur();
       
-            // }
+            }
       
-            // this.currentRowSelect = 1;
-            // table.rows[1].focus();
-            // console.log("current index from service==" + this.currentRowSelect);
-            
+             this.currentRowSelect = 1;
+            var tt = 1;
+             table.rows[tt].focus();
+              
+             }, 100);
+
           }
 
         },
@@ -835,27 +843,30 @@ export class AdminReportComponent implements OnInit {
 
   printFunction(departmentName, investigationRequestId) {
 
-    console.log(departmentName + " " + investigationRequestId);
 
     this.investigationRequestService.fetchPdf(departmentName, investigationRequestId, this.billNumberForm.value.billNumber, this.providerId).subscribe(x => {
 
       var file = new Blob([x], { type: 'application/pdf' })
       var fileURL = URL.createObjectURL(file);
-      console.log("id " + investigationRequestId);
 
-      var a = document.createElement('a');
-      a.href = fileURL;
+      const url= window.URL.createObjectURL(file);
+      window.open(url);
 
-      a.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+      // var a = document.createElement('a');
+      // //a.target = "_blank";
+      // a.href = fileURL;
 
-      setTimeout(function () {
-        window.URL.revokeObjectURL(fileURL);
-        a.remove();
-      }, 100);
+      // a.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+
+      // setTimeout(function () {
+      //   window.URL.revokeObjectURL(fileURL);
+      //   a.remove();
+      // }, 100);
 
     },
       (error) => {
         console.log('getPDF error: ', error);
+        console.error(`Error: ${error.message}`);
       }
     );
 

@@ -313,7 +313,7 @@ export class AddInvestigationComponent implements OnInit {
             // alert("swuccess to updated");
           },
           error => {
-            this.toasterService.Error("Error", "An error is occured");
+            this.toasterService.Error("Error", error.error);
             this.loadingClose();
             this.clearData();
           }

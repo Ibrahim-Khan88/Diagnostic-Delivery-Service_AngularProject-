@@ -2,6 +2,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'ngx-webstorage';
 import * as $ from 'jquery';
+import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { LabDoctorService } from 'src/app/Service/lab-doctor.service';
+import { map, startWith } from 'rxjs/operators';
+import { LabDoctor } from 'src/app/Model/LabDoctor';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +20,18 @@ export class HeaderComponent implements OnInit {
   hospitalImage: string = "../assets/medicalCollage/" + 1 + ".jpg";
   public hide : boolean = true;
   private currentUrl;
+  i : number;
+
+  labDoctorName: string[];
+  filteredOptions: Observable<Object[]>;
+  myControl = new FormControl();
+  autoCompleteObject = [
+    {title : "ibrahim", id : 1},
+    {title : "rifat", id : 2},
+    {title : "hasiv", id : 3},
+    {title : "naim", id : 4}
+  ];
+  labDoctorObject: LabDoctor[];
 
   medicalName: string[] = ['Khulna Medical Hospital', 'Shaheed Sheikh Abu Naser Specialised Hospital',
     'Khulna City Hospital', 'Islami Bank Hospital Khulna', 'Khulna Shishu Hospital', 'Gazi Medical College and Hospital']
@@ -38,9 +55,12 @@ export class HeaderComponent implements OnInit {
     }
 
   constructor(private router: Router,
-    private localStoregeService: LocalStorageService) { }
+    private localStoregeService: LocalStorageService,
+    private labDoctorService: LabDoctorService) { }
 
   ngOnInit(): void {
+
+    this.labDoctorName = new Array<string>();
 
     $(document).ready(function () {
 
@@ -78,10 +98,54 @@ export class HeaderComponent implements OnInit {
     //   }
     // )
 
+
+
+    // this.labDoctorService.fetchLabDoctor(1).subscribe(
+    //   data => {
+
+    //     this.labDoctorObject = data;
+
+    //     for (this.i = 0; this.i < data.length; this.i++) {
+    //       this.labDoctorName[this.i] = data[this.i].title;
+    //     }
+
+    //     this.filteredOptions = this.myControl.valueChanges
+    //       .pipe(
+    //         startWith(''),
+    //         map(value => this._filter(value))
+    //       );
+
+    //   }, error => {}
+    // );
+
     if (window.location.href == 'http://localhost:4200/') {
       this.hide = false;
     }
   }
+
+
+
+  displayFn(object){
+   return object ? object.title : undefined;
+  }
+
+
+  private _filter(value: LabDoctor): Object[] {
+
+    console.log("value " + value);
+    const filterValue = value;
+    console.log("filterr value " + filterValue);
+    return this.labDoctorObject.filter(option => option == filterValue);
+  }
+
+  selectedLAbDoctor(selected) {
+       console.log("select == " + selected.title + "   " + selected.id);
+  }
+
+
+  selectedobejct(selected) {
+    console.log("selselectedobejctect == " + selected.title + "   " + selected.id);
+}
 
   simple(){
 

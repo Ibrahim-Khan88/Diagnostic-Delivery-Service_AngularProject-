@@ -126,7 +126,7 @@ export class AdminInvestigationPostComponent implements OnInit {
     this.investigationPostForm = formBuilder.group({
       'billNumber': [null],
       'name': [null, Validators.required],
-      'mobile': [null],
+      'mobile': [null, Validators.required],
       'paymentMode': [null],
       'paymentAmount': [null, Validators.required],
       'referenceDoctor': [null],
@@ -139,6 +139,10 @@ export class AdminInvestigationPostComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    // this.investigationPostForm.get("billNumber").setValue("b44444");
+    // this.investigationPostForm.get("name").setValue("ibrahim kkkk");
+    // this.investigationPostForm.get("paymentAmount").setValue(300);
 
     // $("#lodingDiv").css({ 'height': 120 });
     // $("#backgroundloding").css({ 'height': "100vh" });
@@ -305,7 +309,6 @@ export class AdminInvestigationPostComponent implements OnInit {
       }
 
     }
-    console.log(selected);
 
   }
 
@@ -417,15 +420,6 @@ export class AdminInvestigationPostComponent implements OnInit {
 
 
   investigationPostFormSubmit() {
-    // setTimeout(
-    //   function() 
-    //   {
-    //     $("#backgroundloding").css({ 'height': "0" });
-    //     $("#lodingDiv").css({ 'height': 0 });
-    //   }, 5000);
-
-    // $("#successfull-next-popup").css({ 'height': 500 });
-    // $("#successfull-next-popup").toggleClass("border-class");
 
 
     // this.investigationPostForm.get('billNumber').setValue("bbbnn");
@@ -433,7 +427,7 @@ export class AdminInvestigationPostComponent implements OnInit {
     // this.investigationPostForm.get('paymentAmount').setValue("3000");
     // this.investigationPostForm.get('mobile').setValue("3000");
 
-    console.log("form value=" + JSON.stringify(this.investigationPostForm.value));
+   // console.log("form value=" + JSON.stringify(this.investigationPostForm.value));
 
 
 
@@ -498,16 +492,16 @@ export class AdminInvestigationPostComponent implements OnInit {
         //this.finish();
       },
       error => {
-        // console.log("An error is occured " + error.data);
         // document.getElementsByClassName("popup")[0].classList.add("active");
         // $("#popup-info").css({ top: window.pageYOffset + 150 });
-        this.toasterService.Error("Error", "An error is occured");
+        this.toasterService.Error("Error", error.error);
         $("#backgroundloding").css({ 'height': "0" });
         $("#lodingDiv").css({ 'height': 0 });
         //this.finish();
       }
     );
 
+ 
     this.selectedInvestigationString = "";
     this.formdata.delete("patientObject");
     this.formdata.delete("selectedInvestigation");
@@ -519,6 +513,7 @@ export class AdminInvestigationPostComponent implements OnInit {
   }
 
   newBill() {
+    this.myControlRefDoctor.setValue("");
     this.showConfirm = false;
     this.showPrintAndBill = false;
     this.finish();

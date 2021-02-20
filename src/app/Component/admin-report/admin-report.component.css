@@ -59,7 +59,7 @@
 /* Tabel section */
 
 table, td, th {
-    border: 1px solid black;
+    border: 1px solid rgb(226, 209, 209);
     height: 35px;
 }
 

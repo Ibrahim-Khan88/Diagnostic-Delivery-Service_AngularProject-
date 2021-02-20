@@ -16,7 +16,7 @@ export class LabDoctorService {
 
   fetchLabDoctor(providerId): Observable<LabDoctor[]> {
    return this._http.get<LabDoctor[]>(this.fetchLabDoctorUrl + providerId);
-  // return this._http.get<LabDoctor[]>("/assets/data/labDoctor.json");
+   //return this._http.get<LabDoctor[]>("/assets/data/labDoctor.json");
   }
 
   assignLabDoctor(labDoctorName, investigationRequestId): Observable<any> {
